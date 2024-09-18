@@ -1,4 +1,6 @@
+using CarWorkshop.Domain.Interfaces;
 using CarWorkshop.Infrastructure.Persistence;
+using CarWorkshop.Infrastructure.Repositories;
 using CarWorkshop.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,5 +20,6 @@ public static class ServiceCollectionExtension
         );
 
         services.AddScoped<CarWorkshopSeeder>();
+        services.AddScoped<ICarWorkshopRepository, CarWorkshopRepository>();
     }
 }
