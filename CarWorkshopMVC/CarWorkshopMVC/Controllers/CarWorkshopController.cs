@@ -5,6 +5,7 @@ using CarWorkshop.Application.CarWorkshop.Commands.EditCarWorkshop;
 using CarWorkshop.Application.CarWorkshop.Queries.GetAllCarWorkshops;
 using CarWorkshop.Application.CarWorkshop.Queries.GetCarWorkshopByEncodedName;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarWorkshopMVC.Controllers;
@@ -20,12 +21,14 @@ public class CarWorkshopController : Controller
         _mapper = mapper;
     }
 
+    [Authorize(Roles = "Owner")]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateCarWorkshopCommand command)
     {
         if (!ModelState.IsValid)
@@ -53,6 +56,10 @@ public class CarWorkshopController : Controller
     public async Task<IActionResult> Edit(string encodedName)
     {
         var dto = await _mediator.Send(new GetCarWorkshopByEncodedNameQuery(encodedName));
+        if (!dto.IsEditable)
+        {
+            return RedirectToAction("NoAccess", "Home");
+        }
         EditCarWorkshopCommand model = _mapper.Map<EditCarWorkshopCommand>(dto);
         return View(model);
     }

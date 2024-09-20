@@ -1,6 +1,6 @@
 ﻿@{
-    var action = ViewContext.RouteData.Values["Action"]!.ToString();
-    var controller = ViewContext.RouteData.Values["Controller"]!.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
 }
 
 <!DOCTYPE html>
@@ -37,6 +37,7 @@
                         </li>
                         </li>
                     </ul>
+                    <partial name="_LoginPartial"/>
                 </div>
             </div>
         </nav>
