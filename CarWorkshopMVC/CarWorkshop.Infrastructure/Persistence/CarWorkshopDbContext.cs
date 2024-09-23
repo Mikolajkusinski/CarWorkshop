@@ -9,10 +9,16 @@ public class CarWorkshopDbContext : IdentityDbContext
         : base(options) { }
 
     public DbSet<Domain.Entities.CarWorkshop> CarWorkshops { get; set; }
+    public DbSet<Domain.Entities.CarWorkshopService> Services { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Domain.Entities.CarWorkshop>().OwnsOne(x => x.ContactDetails);
+        modelBuilder
+            .Entity<Domain.Entities.CarWorkshop>()
+            .HasMany(x => x.Services)
+            .WithOne(x => x.CarWorkshop)
+            .HasForeignKey(x => x.CarWorkshopId);
     }
 }
